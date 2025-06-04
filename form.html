@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Maintenance Alat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Form Maintenance Alat</h2>
+    <form id="maintenanceForm">
+      <label>Tanggal</label>
+      <input type="date" name="tanggal" required>
+
+      <label>Kegiatan</label>
+      <input type="text" name="kegiatan" placeholder="Contoh: Pengecekan rutin" required>
+
+      <label>Nama Teknisi</label>
+      <input type="text" name="teknisi" required>
+
+      <label>Catatan Umum</label>
+      <textarea name="catatan" rows="3"></textarea>
+
+      <label>Merk Elektromotor</label>
+      <input type="text" name="merk">
+
+      <label>Daya (kW)</label>
+      <input type="number" name="daya" step="0.1">
+
+      <label>RPM</label>
+      <input type="number" name="rpm">
+
+      <label>Arus R (A)</label>
+      <input type="number" name="arus_r" step="0.1">
+
+      <label>Arus S (A)</label>
+      <input type="number" name="arus_s" step="0.1">
+
+      <label>Arus T (A)</label>
+      <input type="number" name="arus_t" step="0.1">
+
+      <label>Temperatur (°C)</label>
+      <input type="number" name="temperatur" step="0.1">
+
+      <label>Kondisi Body Elmo</label>
+      <select name="kondisi_elmo">
+        <option value="Normal">Normal</option>
+        <option value="Panas">Panas</option>
+        <option value="Getar">Getar</option>
+        <option value="Retak">Retak</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+
+      <label>Rasio Gearbox</label>
+      <input type="text" name="rasio">
+
+      <label>Output Gearbox (RPM)</label>
+      <input type="number" name="output_gearbox" step="0.1">
+
+      <label>Level Oli</label>
+      <select name="level_oli">
+        <option value="Normal">Normal</option>
+        <option value="Kurang">Kurang</option>
+        <option value="Tidak Ada">Tidak Ada</option>
+      </select>
+
+      <label>Kondisi Body Gearbox</label>
+      <select name="kondisi_gearbox">
+        <option value="Normal">Normal</option>
+        <option value="Bocor">Bocor</option>
+        <option value="Retak">Retak</option>
+        <option value="Kotor">Kotor</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+
+      <button type="submit">Kirim</button>
+    </form>
+  </div>
+
+  <script>
+    const sheetURL = "https://script.google.com/macros/s/AKfycbziexskgTdHcbkwETa7u-flYb1z_41_-itQzBvfJdLIxRhhx1ACT0PDGK9KN6CCNmQb/exec"; // ganti dengan URL Web App kamu
+
+    document.getElementById("maintenanceForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = {
+        tanggal: this.tanggal.value,
+        kegiatan: this.kegiatan.value,
+        teknisi: this.teknisi.value,
+        catatan: this.catatan.value,
+        merk: this.merk.value,
+        daya: this.daya.value,
+        rpm: this.rpm.value,
+        arus_r: this.arus_r.value,
+        arus_s: this.arus_s.value,
+        arus_t: this.arus_t.value,
+        temperatur: this.temperatur.value,
+        kondisi_elmo: this.kondisi_elmo.value,
+        rasio: this.rasio.value,
+        output_gearbox: this.output_gearbox.value,
+        level_oli: this.level_oli.value,
+        kondisi_gearbox: this.kondisi_gearbox.value
+      };
+
+      fetch(sheetURL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(() => {
+        alert("Data berhasil dikirim ke Google Sheets.");
+        this.reset();
+      }).catch(err => {
+        alert("Terjadi kesalahan: " + err);
+      });
+    });
+  </script>
+</body>
+</html>
