@@ -9,7 +9,7 @@ form.addEventListener('submit', (e) => {
   const data = {};
   formData.forEach((val, key) => data[key] = val);
 
-  fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbxqkOwPvRU54QxQ3JpYto3JAqouuPKHObBGDBbt2Hsfy1OoV-FZIYWoWdO1E4sEVKnX/exec', {
     method: 'POST',
     body: JSON.stringify(data)
   }).then(res => res.text())
