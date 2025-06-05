@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Info Mesin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Deskripsi Unit Mesin</h2>
+    <div id="mesin-info"></div>
+    <a id="inputLink" href="#"><button>📝 Input Maintenance</button></a>
+    <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit" target="_blank"><button>📊 Lihat Data</button></a>
+  </div>
+
+  <script>
+    const mesinList = {
+      "ELMO-01": { merk: "Siemens", daya: "45 kW", rpm: "1480", lokasi: "Press Station" },
+      "ELMO-02": { merk: "ABB", daya: "55 kW", rpm: "1480", lokasi: "Kernel Plant" }
+    };
+    const id = new URLSearchParams(window.location.search).get('id') || "ELMO-01";
+    const mesin = mesinList[id] || mesinList["ELMO-01"];
+    document.getElementById("mesin-info").innerHTML = `
+      <p><strong>ID Mesin:</strong> ${id}</p>
+      <p><strong>Merk:</strong> ${mesin.merk}</p>
+      <p><strong>Daya:</strong> ${mesin.daya}</p>
+      <p><strong>RPM:</strong> ${mesin.rpm}</p>
+      <p><strong>Lokasi:</strong> ${mesin.lokasi}</p>
+    `;
+    document.getElementById("inputLink").href = `input.html?id=${id}`;
+  </script>
+</body>
+</html>
