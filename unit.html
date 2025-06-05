@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Detail Unit Mesin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .container { border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    button { margin: 5px; padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>Deskripsi Unit Mesin</h2>
+  <div id="unit-info" class="container">Memuat data...</div>
+
+  <div style="text-align:center;">
+    <button onclick="navigateToInput()">Input Maintenance</button>
+    <button onclick="navigateToHistory()">Tampilkan Historis</button>
+    <button onclick="openSheet()">Database</button>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const unitId = urlParams.get('id');
+
+    async function loadUnitInfo() {
+      try {
+        const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?id=' + unitId);
+        const data = await response.json();
+        if (data.length > 0) {
+          const info = data[0];
+          document.getElementById('unit-info').innerHTML = `
+            <strong>ID Mesin:</strong> ${info['ID Mesin']}<br>
+            <strong>Nama Mesin:</strong> ${info['Nama Mesin']}<br>
+            <strong>Merk Elektromotor:</strong> ${info['Merk Elektromotor']}<br>
+            <strong>Daya:</strong> ${info['Daya']} kW<br>
+            <strong>RPM:</strong> ${info['RPM']}<br>
+            <strong>Lokasi:</strong> ${info['Lokasi']}<br>
+          `;
+        } else {
+          document.getElementById('unit-info').innerText = 'Data tidak ditemukan.';
+        }
+      } catch (err) {
+        document.getElementById('unit-info').innerText = 'Gagal memuat data.';
+      }
+    }
+
+    function navigateToInput() {
+      window.location.href = 'input.html?id=' + unitId;
+    }
+
+    function navigateToHistory() {
+      window.location.href = 'history.html?id=' + unitId;
+    }
+
+    function openSheet() {
+      const pw = prompt("Masukkan password:");
+      if (pw === "1234") {
+        window.open("https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID", "_blank");
+      } else {
+        alert("Password salah.");
+      }
+    }
+
+    loadUnitInfo();
+  </script>
+</body>
+</html>
