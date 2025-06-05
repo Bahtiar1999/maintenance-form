@@ -1,1 +1,89 @@
-<html><body><h2>Halaman Tampilkan Historis Maintenance (akan dikembangkan)</h2></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Histori Maintenance</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    h2 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #999;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #007acc;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h2>Histori Maintenance</h2>
+  <div id="unitInfo"></div>
+  <table id="historyTable">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Job Description</th>
+        <th>Part Diganti</th>
+        <th>Running Hours</th>
+        <th>Remark</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data akan ditambahkan secara dinamis -->
+    </tbody>
+  </table>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbycIVHoSc1jXeujWPqabi5Q7m5XzzmSqFnEbb4_GgA4TiMegM6TO8DbTiHn0sgtK9ng/exec'; // Ganti dengan URL kamu
+
+    // Ambil info deskripsi unit
+    fetch(`${scriptURL}?id=${id}&action=getDeskripsi`)
+      .then(res => res.json())
+      .then(data => {
+        const div = document.getElementById('unitInfo');
+        div.innerHTML = `
+          <p><strong>ID Mesin:</strong> ${data['ID Mesin']}</p>
+          <p><strong>Nama Mesin:</strong> ${data['Nama Mesin']}</p>
+          <p><strong>Merk Elektromotor:</strong> ${data['Merk Elektromotor']}</p>
+          <p><strong>Daya (kW):</strong> ${data['Daya (kW)']}</p>
+          <p><strong>RPM:</strong> ${data['RPM']}</p>
+          <p><strong>Lokasi:</strong> ${data['Lokasi']}</p>
+        `;
+      });
+
+    // Ambil histori maintenance
+    fetch(`${scriptURL}?id=${id}&action=getMaintenance`)
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector('#historyTable tbody');
+        data.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item['Tanggal']}</td>
+            <td>${item['Job Description']}</td>
+            <td>${item['Part Diganti']}</td>
+            <td>${item['Running Hours']}</td>
+            <td>${item['Remark']}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      });
+  </script>
+</body>
+</html>
