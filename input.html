@@ -1,1 +1,88 @@
-<html><body><h2>Halaman Input Maintenance (akan dikembangkan)</h2></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Input Maintenance</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Input Maintenance</h1>
+
+    <p><strong>ID Mesin:</strong> <span id="idMesin"></span></p>
+
+    <form id="maintenanceForm">
+      <label for="date">Tanggal:</label><br />
+      <input type="date" id="date" name="date" required /><br /><br />
+
+      <label for="jobDesc">Job Description:</label><br />
+      <textarea id="jobDesc" name="jobDesc" rows="3" required></textarea><br /><br />
+
+      <label for="partReplace">Part Replace:</label><br />
+      <input type="text" id="partReplace" name="partReplace" /><br /><br />
+
+      <label for="runningHours">Running Hours:</label><br />
+      <input type="number" id="runningHours" name="runningHours" min="0" /><br /><br />
+
+      <label for="remark">Remark:</label><br />
+      <textarea id="remark" name="remark" rows="2"></textarea><br /><br />
+
+      <label for="password">Password:</label><br />
+      <input type="password" id="password" name="password" required /><br /><br />
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <p id="message" style="color: red;"></p>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const mesinId = urlParams.get('id');
+
+    document.getElementById('idMesin').textContent = mesinId || 'ID Mesin tidak ditemukan';
+
+    document.getElementById('maintenanceForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const password = document.getElementById('password').value;
+      if (password !== '1234') {
+        document.getElementById('message').textContent = 'Password salah!';
+        return;
+      }
+
+      const formData = {
+        'ID Mesin': mesinId,
+        'Tanggal': document.getElementById('date').value,
+        'Job Description': document.getElementById('jobDesc').value,
+        'Part Replace': document.getElementById('partReplace').value,
+        'Running Hours': document.getElementById('runningHours').value,
+        'Remark': document.getElementById('remark').value
+      };
+
+      // Kirim ke Google Apps Script
+      fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.text())
+        .then(result => {
+          document.getElementById('message').style.color = 'green';
+          document.getElementById('message').textContent = 'Data berhasil disimpan!';
+          this.reset();
+        })
+        .catch(error => {
+          document.getElementById('message').style.color = 'red';
+          document.getElementById('message').textContent = 'Gagal mengirim data!';
+          console.error(error);
+        });
+    });
+  </script>
+</body>
+</html>
