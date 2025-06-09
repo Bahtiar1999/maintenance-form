@@ -2,7 +2,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const mesinId = urlParams.get('id');
 const scriptURL = 'https://script.google.com/macros/s/AKfycbwF-Q5xQBcR6OEZ3YoUdcBmBaraB9fH2-Nfu04A0kfnrWTmZeI5-FGxYBJoteaonuVp/exec'; // Ganti dengan URL Web App kamu
 
-Ambil deskripsi unit
+//Ambil deskripsi unit
 function fetchDeskripsiUnit() {
   fetch(`${scriptURL}?action=getDeskripsi&id=${mesinId}`)
     .then(res => res.json())
