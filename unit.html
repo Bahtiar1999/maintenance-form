@@ -25,6 +25,11 @@
     const unitId = urlParams.get('id');
 
     async function loadUnitInfo() {
+      if (!unitId) {
+          document.getElementById('unit-info').innerText = 'ID mesin tidak ditemukan di URL.';
+          return;
+          }
+      
       try {
         const response = await fetch('https://script.google.com/macros/s/AKfycbycIVHoSc1jXeujWPqabi5Q7m5XzzmSqFnEbb4_GgA4TiMegM6TO8DbTiHn0sgtK9ng/exec' + unitId);
       
