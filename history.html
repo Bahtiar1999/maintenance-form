@@ -50,7 +50,7 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbycIVHoSc1jXeujWPqabi5Q7m5XzzmSqFnEbb4_GgA4TiMegM6TO8DbTiHn0sgtK9ng/exec'; // Ganti dengan URL kamu
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbycIVHoSc1jXeujWPqabi5Q7m5XzzmSqFnEbb4_GgA4TiMegM6TO8DbTiHn0sgtK9ng/exec';// Ganti dengan URL kamu
 
     // Ambil info deskripsi unit
     fetch(`${scriptURL}?id=${id}&action=getDeskripsi`)
