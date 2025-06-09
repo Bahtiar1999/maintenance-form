@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const mesinId = urlParams.get('id');
-const scriptURL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; // Ganti dengan URL Web App kamu
+const scriptURL = 'https://script.google.com/macros/s/AKfycbycIVHoSc1jXeujWPqabi5Q7m5XzzmSqFnEbb4_GgA4TiMegM6TO8DbTiHn0sgtK9ng/exec'; // Ganti dengan URL Web App kamu
 
 // Ambil deskripsi unit
 function fetchDeskripsiUnit() {
