@@ -37,20 +37,22 @@
     <p id="message" style="color: red;"></p>
   </div>
 
-  <script src="script.js"></script>
-
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const mesinId = urlParams.get('id');
 
+    const form = document.getElementById('maintenanceForm');
+    const messageElement = document.getElementById('message');
+
     document.getElementById('idMesin').textContent = mesinId || 'ID Mesin tidak ditemukan';
 
-    document.getElementById('maintenanceForm').addEventListener('submit', function (e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
 
       const password = document.getElementById('password').value;
       if (password !== '1234') {
-        document.getElementById('message').textContent = 'Password salah!';
+        messageElement.textContent = 'Password salah!';
+        messageElement.style.color = 'red';
         return;
       }
 
@@ -63,7 +65,8 @@
         'Remark': document.getElementById('remark').value
       };
 
-      // Kirim ke Google Apps Script
+      console.log("Mengirim data ke Apps Script:", formData);
+
       fetch('https://script.google.com/macros/s/AKfycbwF-Q5xQBcR6OEZ3YoUdcBmBaraB9fH2-Nfu04A0kfnrWTmZeI5-FGxYBJoteaonuVp/exec', {
         method: 'POST',
         body: JSON.stringify(formData),
@@ -73,14 +76,15 @@
       })
         .then(response => response.text())
         .then(result => {
-          document.getElementById('message').style.color = 'green';
-          document.getElementById('message').textContent = 'Data berhasil disimpan!';
-          this.reset();
+          console.log("Respon dari server:", result);
+          messageElement.style.color = 'green';
+          messageElement.textContent = 'Data berhasil disimpan!';
+          form.reset();
         })
         .catch(error => {
-          document.getElementById('message').style.color = 'red';
-          document.getElementById('message').textContent = 'Gagal mengirim data!';
-          console.error(error);
+          console.error("Error saat mengirim:", error);
+          messageElement.style.color = 'red';
+          messageElement.textContent = 'Gagal mengirim data!';
         });
     });
   </script>
