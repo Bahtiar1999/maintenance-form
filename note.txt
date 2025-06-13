@@ -1,1 +1,78 @@
 https://script.google.com/macros/s/AKfycbzNsxNhwscpBRwuKWeNvcqGH2bXVx-gaj7DipknZZlrtGUUP3vyzcOXoa2Pyf1z-keZ/exec
+function doGet(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  if (e.parameter.id && e.parameter.action === 'getDeskripsi') {
+    const sheet = ss.getSheetByName("Deskripsi");
+    const data = sheet.getDataRange().getValues();
+    const headers = data.shift();
+    const result = data.find(row => row[0] === e.parameter.id);
+
+    if (!result) {
+      // Kembalikan dalam bentuk JSON meskipun tidak ditemukan
+      return ContentService.createTextOutput(
+        JSON.stringify({ error: "Data tidak ditemukan" })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    let obj = {};
+    headers.forEach((h, i) => obj[h] = result[i]);
+    return ContentService.createTextOutput(JSON.stringify(obj))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (e.parameter.id && e.parameter.action === 'getMaintenance') {
+    const sheet = ss.getSheetByName("Maintenance");
+    const data = sheet.getDataRange().getValues();
+    const headers = data.shift();
+    const result = data.filter(row => row[0] === e.parameter.id);
+
+    let output = result.map(row => {
+      let obj = {};
+      headers.forEach((h, i) => obj[h] = row[i]);
+      return obj;
+    });
+
+    return ContentService.createTextOutput(JSON.stringify(output))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  return ContentService.createTextOutput(
+    JSON.stringify({ error: "Invalid Request" })
+  ).setMimeType(ContentService.MimeType.JSON);
+}
+function doPost(e) {
+  try {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Maintenance");
+    const body = JSON.parse(e.postData.contents);
+
+    sheet.appendRow([
+      body["ID Mesin"],
+      body["Tanggal"],
+      body["Job Description"],
+      body["Part Replace"],
+      body["Running Hours"],
+      body["Remark"]
+    ]);
+
+    return ContentService.createTextOutput("Success");
+  } catch (error) {
+    Logger.log(error);
+    return ContentService.createTextOutput("Error: " + error.message);
+  }
+}
+// function doPost(e) {
+//   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Maintenance");
+//   const body = JSON.parse(e.postData.contents);
+
+//   sheet.appendRow([
+//     body.id,
+//     body.tanggal,
+//     body.jobdesc,
+//     body.part,
+//     body.rh,
+//     body.remark
+//   ]);
+
+//   return ContentService.createTextOutput("Success");
+// }
